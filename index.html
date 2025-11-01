@@ -1,115 +1,645 @@
-<!-- 시간표 -->
-            <div id="content-timetable">
-                <div class="card">
-                    <h2 class="section-title">
-                        <svg width="24" height="24" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>초락초 5학년</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(to bottom right, #dbeafe, #ffffff, #fae8ff);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .header-content {
+            padding: 1.5rem 0;
+        }
+        .school-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .school-name h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .tabs {
+            display: flex;
+            gap: 1rem;
+        }
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        .tab-active {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+        }
+        .tab-inactive {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        .tab-inactive:hover {
+            background: #e5e7eb;
+        }
+        .meal-active {
+            background: #16a34a;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(22, 163, 74, 0.4);
+        }
+        .main-content {
+            padding: 2rem 0;
+        }
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        }
+        th {
+            color: white;
+            font-weight: 600;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        td {
+            padding: 1.25rem 1rem;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            color: #1f2937;
+        }
+        tbody tr:hover {
+            background: #eff6ff;
+        }
+        .lunch-row {
+            background: #fef3c7 !important;
+        }
+        .lunch-row td {
+            font-weight: 500;
+        }
+        .period-cell {
+            font-weight: 700;
+            color: #374151;
+        }
+        .meal-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+        .meal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+        .meal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .meal-date {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .meal-calories {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 0.25rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .meal-menu {
+            color: #374151;
+            line-height: 1.625;
+        }
+        .meal-empty {
+            color: #9ca3af;
+            font-style: italic;
+        }
+        .info-box {
+            background: #dbeafe;
+            border: 2px solid #93c5fd;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .info-box p {
+            color: #1e40af;
+            font-size: 0.875rem;
+        }
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        .hidden {
+            display: none;
+        }
+        .grade-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.5rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            color: #6b7280;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.875rem;
+        }
+        .grade-btn:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+        .grade-active {
+            background: #2563eb !important;
+            color: white !important;
+            border-color: #2563eb !important;
+        }
+        
+        /* 로그인 페이지 스타일 */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .login-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            padding: 3rem 2.5rem;
+            max-width: 420px;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+        }
+        .login-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        .login-subtitle {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+        }
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        .error-message {
+            background: #fee2e2;
+            border: 2px solid #fecaca;
+            color: #991b1b;
+            padding: 0.875rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 로그인 페이지 -->
+    <div id="login-page" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon">
+                    <svg width="48" height="48" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h1 class="login-title">초락 초등학교</h1>
+                <p class="login-subtitle">학생 인증 키를 입력해주세요</p>
+            </div>
+            
+            <form onsubmit="checkLogin(event)">
+                <div class="input-group">
+                    <label class="input-label" for="access-key">
+                        🔑 액세스 키
+                    </label>
+                    <input 
+                        type="text" 
+                        id="access-key" 
+                        class="input-field" 
+                        placeholder="XXXXX-XXXXX-XXXXX-XXXXX"
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    로그인
+                </button>
+                
+                <div id="error-message" class="hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 메인 페이지 (로그인 후 표시) -->
+    <div id="main-page" class="hidden">
+        <!-- 헤더 -->
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="school-name">
+                        <svg width="28" height="28" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
-                        주간 시간표
-                    </h2>
-                    
-                    <!-- 학년 선택 버튼 -->
-                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-                        <button onclick="showGrade(1)" class="grade-btn">1학년</button>
-                        <button onclick="showGrade(2)" class="grade-btn">2학년</button>
-                        <button onclick="showGrade(3)" class="grade-btn">3학년</button>
-                        <button onclick="showGrade(4)" class="grade-btn">4학년</button>
-                        <button onclick="showGrade(5)" class="grade-btn grade-active">5학년</button>
-                        <button onclick="showGrade(6)" class="grade-btn">6학년</button>
+                        <h1>초락 초등학교</h1>
                     </div>
-
-                    <div id="grade-5" style="overflow-x: auto;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>교시</th>
-                                    <th>월</th>
-                                    <th>화</th>
-                                    <th>수</th>
-                                    <th>목</th>
-                                    <th>금</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="period-cell">1</td>
-                                    <td>영어</td>
-                                    <td>수학</td>
-                                    <td>사회</td>
-                                    <td>수학</td>
-                                    <td>수학</td>
-                                </tr>
-                                <tr>
-                                    <td class="period-cell">2</td>
-                                    <td>과학</td>
-                                    <td>국어</td>
-                                    <td>국어</td>
-                                    <td>음악</td>
-                                    <td>과학</td>
-                                </tr>
-                                <tr>
-                                    <td class="period-cell">3</td>
-                                    <td>수학</td>
-                                    <td>사회</td>
-                                    <td>미술</td>
-                                    <td>과학</td>
-                                    <td>자율활동</td>
-                                </tr>
-                                <tr>
-                                    <td class="period-cell">4</td>
-                                    <td>국어</td>
-                                    <td>도덕</td>
-                                    <td>미술</td>
-                                    <td>과학</td>
-                                    <td>음악</td>
-                                </tr>
-                                <tr class="lunch-row">
-                                    <td class="period-cell">🍚</td>
-                                    <td colspan="5">점심시간</td>
-                                </tr>
-                                <tr>
-                                    <td class="period-cell">5</td>
-                                    <td>국어</td>
-                                    <td>영어</td>
-                                    <td>국어</td>
-                                    <td>국어</td>
-                                    <td>사회</td>
-                                </tr>
-                                <tr>
-                                    <td class="period-cell">6</td>
-                                    <td>실과</td>
-                                    <td>체육</td>
-                                    <td>영어</td>
-                                    <td></td>
-                                    <td>체육</td>
-                                </tr>
-                                <tr>
-                                    <td class="period-cell">7</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- 다른 학년들 (준비중 메시지) -->
-                    <div id="grade-1" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <p style="font-size: 1.125rem;">1학년 시간표는 준비 중입니다</p>
-                    </div>
-                    <div id="grade-2" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <p style="font-size: 1.125rem;">2학년 시간표는 준비 중입니다</p>
-                    </div>
-                    <div id="grade-3" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <p style="font-size: 1.125rem;">3학년 시간표는 준비 중입니다</p>
-                    </div>
-                    <div id="grade-4" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <p style="font-size: 1.125rem;">4학년 시간표는 준비 중입니다</p>
-                    </div>
-                    <div id="grade-6" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <p style="font-size: 1.125rem;">6학년 시간표는 준비 중입니다</p>
+                    <div class="tabs">
+                        <button onclick="showTab('timetable')" id="btn-timetable" class="tab-btn tab-active">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            시간표
+                        </button>
+                        <button onclick="showTab('meals')" id="btn-meals" class="tab-btn tab-inactive">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            급식표
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="container">
+            <div class="main-content">
+                
+                <!-- 시간표 -->
+                <div id="content-timetable">
+                    <div class="card">
+                        <h2 class="section-title">
+                            <svg width="24" height="24" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            주간 시간표
+                        </h2>
+                        
+                        <!-- 학년 선택 버튼 -->
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                            <button onclick="showGrade(1)" class="grade-btn">1학년</button>
+                            <button onclick="showGrade(2)" class="grade-btn">2학년</button>
+                            <button onclick="showGrade(3)" class="grade-btn">3학년</button>
+                            <button onclick="showGrade(4)" class="grade-btn">4학년</button>
+                            <button onclick="showGrade(5)" class="grade-btn grade-active">5학년</button>
+                            <button onclick="showGrade(6)" class="grade-btn">6학년</button>
+                        </div>
+
+                        <div id="grade-5" style="overflow-x: auto;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>교시</th>
+                                        <th>월</th>
+                                        <th>화</th>
+                                        <th>수</th>
+                                        <th>목</th>
+                                        <th>금</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="period-cell">1</td>
+                                        <td>영어</td>
+                                        <td>수학</td>
+                                        <td>사회</td>
+                                        <td>수학</td>
+                                        <td>수학</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="period-cell">2</td>
+                                        <td>과학</td>
+                                        <td>국어</td>
+                                        <td>국어</td>
+                                        <td>음악</td>
+                                        <td>과학</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="period-cell">3</td>
+                                        <td>수학</td>
+                                        <td>사회</td>
+                                        <td>미술</td>
+                                        <td>과학</td>
+                                        <td>자율활동</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="period-cell">4</td>
+                                        <td>국어</td>
+                                        <td>도덕</td>
+                                        <td>미술</td>
+                                        <td>과학</td>
+                                        <td>음악</td>
+                                    </tr>
+                                    <tr class="lunch-row">
+                                        <td class="period-cell">🍚</td>
+                                        <td colspan="5">점심시간</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="period-cell">5</td>
+                                        <td>국어</td>
+                                        <td>영어</td>
+                                        <td>국어</td>
+                                        <td>국어</td>
+                                        <td>사회</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="period-cell">6</td>
+                                        <td>실과</td>
+                                        <td>체육</td>
+                                        <td>영어</td>
+                                        <td></td>
+                                        <td>체육</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="period-cell">7</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 다른 학년들 (준비중 메시지) -->
+                        <div id="grade-1" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
+                            <p style="font-size: 1.125rem;">1학년 시간표는 준비 중입니다</p>
+                        </div>
+                        <div id="grade-2" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
+                            <p style="font-size: 1.125rem;">2학년 시간표는 준비 중입니다</p>
+                        </div>
+                        <div id="grade-3" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
+                            <p style="font-size: 1.125rem;">3학년 시간표는 준비 중입니다</p>
+                        </div>
+                        <div id="grade-4" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
+                            <p style="font-size: 1.125rem;">4학년 시간표는 준비 중입니다</p>
+                        </div>
+                        <div id="grade-6" class="hidden" style="text-align: center; padding: 3rem; color: #6b7280;">
+                            <p style="font-size: 1.125rem;">6학년 시간표는 준비 중입니다</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 급식표 -->
+                <div id="content-meals" class="hidden">
+                    <h2 class="section-title">
+                        <svg width="24" height="24" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        이번 주 급식표
+                    </h2>
+
+                    <div class="meal-card">
+                        <div class="meal-header">
+                            <h3 class="meal-date">11월 3일 (월요일)</h3>
+                            <span class="meal-calories">582kcal</span>
+                        </div>
+                        <p class="meal-menu">현미밥, 조각케이크, 한우미역국, 우렁양배추쌈, 순살치킨갈파인소스, 배추김치, 우유</p>
+                    </div>
+
+                    <div class="meal-card">
+                        <div class="meal-header">
+                            <h3 class="meal-date">11월 4일 (화요일)</h3>
+                            <span class="meal-calories">698kcal</span>
+                        </div>
+                        <p class="meal-menu">팥밥, 쫄면, 동태찌개, 느타리버섯맛살볶음, 총각김치, 우유, 단감</p>
+                    </div>
+
+                    <div class="meal-card">
+                        <div class="meal-header">
+                            <h3 class="meal-date">11월 5일 (수요일)</h3>
+                        </div>
+                        <p class="meal-empty">급식 정보가 없습니다</p>
+                    </div>
+
+                    <div class="meal-card">
+                        <div class="meal-header">
+                            <h3 class="meal-date">11월 6일 (목요일)</h3>
+                            <span class="meal-calories">793kcal</span>
+                        </div>
+                        <p class="meal-menu">차조밥, 건새우아욱된장국, 고구마호두두조림, 한우버섯불고기, 치즈계란말이, 배추김치, 우유</p>
+                    </div>
+
+                    <div class="meal-card">
+                        <div class="meal-header">
+                            <h3 class="meal-date">11월 7일 (금요일)</h3>
+                            <span class="meal-calories">864kcal</span>
+                        </div>
+                        <p class="meal-menu">밤밥, 베트남쌀국수, 숙주미나리무침, 등갈비바베큐, 총각김치, 우유, 사과</p>
+                    </div>
+                    
+                    <div class="info-box">
+                        <p>💡 <strong>안내:</strong> 급식표 내용에 잘못된 부분이 있으면 선생님께 말씀해 주세요</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 푸터 -->
+        <div class="footer">
+            <p>📡 초락초 도우미 📡</p>
+        </div>
+    </div>
+
+    <script>
+        // 유효한 액세스 키 목록
+        const validKeys = ['FFUGN2-9X7A-NM10S-NN19S', '59ZBF-NM199X-BM10X'];
+
+        function checkLogin(event) {
+            event.preventDefault();
+            
+            const inputKey = document.getElementById('access-key').value.trim().toUpperCase();
+            const errorDiv = document.getElementById('error-message');
+            
+            // 키 검증
+            if (validKeys.includes(inputKey)) {
+                // 로그인 성공
+                document.getElementById('login-page').classList.add('hidden');
+                document.getElementById('main-page').classList.remove('hidden');
+            } else {
+                // 로그인 실패
+                errorDiv.innerHTML = `
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <span><strong>오류:</strong> 잘못된 액세스 키입니다</span>
+                `;
+                errorDiv.classList.remove('hidden');
+                
+                // 3초 후 에러 메시지 제거
+                setTimeout(() => {
+                    errorDiv.classList.add('hidden');
+                }, 3000);
+            }
+        }
+
+        function showTab(tab) {
+            const timetableBtn = document.getElementById('btn-timetable');
+            const mealsBtn = document.getElementById('btn-meals');
+            const timetableContent = document.getElementById('content-timetable');
+            const mealsContent = document.getElementById('content-meals');
+
+            if (tab === 'timetable') {
+                timetableBtn.className = 'tab-btn tab-active';
+                mealsBtn.className = 'tab-btn tab-inactive';
+                timetableContent.classList.remove('hidden');
+                mealsContent.classList.add('hidden');
+            } else {
+                timetableBtn.className = 'tab-btn tab-inactive';
+                mealsBtn.className = 'tab-btn meal-active';
+                timetableContent.classList.add('hidden');
+                mealsContent.classList.remove('hidden');
+            }
+        }
+
+        function showGrade(grade) {
+            // 모든 학년 버튼 비활성화
+            const gradeBtns = document.querySelectorAll('.grade-btn');
+            gradeBtns.forEach(btn => {
+                btn.classList.remove('grade-active');
+            });
+            
+            // 클릭한 버튼 활성화
+            event.target.classList.add('grade-active');
+            
+            // 모든 학년 콘텐츠 숨기기
+            for (let i = 1; i <= 6; i++) {
+                const gradeContent = document.getElementById('grade-' + i);
+                if (gradeContent) {
+                    gradeContent.classList.add('hidden');
+                }
+            }
+            
+            // 선택한 학년 콘텐츠 보이기
+            const selectedGrade = document.getElementById('grade-' + grade);
+            if (selectedGrade) {
+                selectedGrade.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
