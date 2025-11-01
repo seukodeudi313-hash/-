@@ -363,9 +363,7 @@
             background: white;
             border-radius: 3px;
             width: 0%;
-        }
-        .loading-progress-bar.animate {
-            animation: progress 6s ease-in-out forwards;
+            transition: width 5s ease-in-out;
         }
         @keyframes progress {
             to { width: 100%; }
@@ -644,11 +642,19 @@
             // 키 검증
             if (validKeys.includes(inputKey)) {
                 // 로그인 페이지 숨기기
-                document.getElementById('login-page').classList.add('hidden');
+                const loginPage = document.getElementById('login-page');
+                loginPage.classList.add('hidden');
                 
                 // 로딩 화면 표시
                 const loadingScreen = document.getElementById('loading-screen');
+                const progressBar = loadingScreen.querySelector('.loading-progress-bar');
+                
                 loadingScreen.classList.remove('hidden');
+                
+                // 프로그레스 바 애니메이션 시작
+                setTimeout(() => {
+                    progressBar.classList.add('animate');
+                }, 50);
                 
                 // 4~7초 랜덤 시간 후 메인 페이지로 이동
                 const loadingTime = Math.floor(Math.random() * 3000) + 4000; // 4000~7000ms
