@@ -598,9 +598,9 @@
         const validKeys = ['0501', '0502', '0503', '0504', '0505', '0506'];
         
         // NEIS API 설정
-        const NEIS_API_KEY = '47f5fe6f89f64e3bbe16a7ec4885d50a';
+        const NEIS_API_KEY = '34b6f4de98a1454caea81413c829fbca';
         const ATPT_OFCDC_SC_CODE = 'N10'; // 충남교육청
-        const SD_SCHUL_CODE = '8500138'; // 초락초등학교 코드
+        const SD_SCHUL_CODE = '8291045'; // 초락초등학교 행정표준코드
 
         // 급식 정보 가져오기
         async function fetchMealInfo() {
@@ -621,6 +621,8 @@
                 
                 const response = await fetch(url);
                 const data = await response.json();
+                
+                console.log('급식 응답 데이터:', data);
                 
                 displayMealInfo(data, monday);
             } catch (error) {
